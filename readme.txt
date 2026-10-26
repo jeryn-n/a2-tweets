@@ -1,4 +1,4 @@
---Readme document for *YOUR NAME*, *YOUR_EMAIL@uci.edu*--
+--Readme document for *Jeryn Nyberg*, *jdnyberg@uci.edu*--
 
 1. How many assignment points do you believe you completed (replace the *'s with your numbers)?
 
@@ -16,8 +16,8 @@
 
 
 4. What classmates or other individuals did you consult as part of this assignment? What did you discuss?
-
+None.
 
 
 5. Is there anything special we need to know in order to run your code?
-
+No.
