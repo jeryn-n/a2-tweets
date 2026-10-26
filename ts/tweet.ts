@@ -8,22 +8,68 @@ class Tweet {
 	}
 
 	//returns either 'live_event', 'achievement', 'completed_event', or 'miscellaneous'
-    get source():string {
-        //TODO: identify whether the source is a live event, an achievement, a completed event, or miscellaneous.
-        return "unknown";
+    get source(): string {
+        const text = this.text.toLowerCase();
+
+        if (text.startsWith("just completed") ||
+            text.startsWith("just posted") ||
+            text.startsWith("completed a ") ||
+            text.startsWith("i just completed")) {
+            return "completed_event";
+        }
+
+        if (text.startsWith("watch my ")) {
+            return "live_event";
+        }
+
+        if (text.startsWith("achieved a ") ||
+            text.startsWith("i just set a goal") ||
+            text.startsWith("#runkeeper farthest distance")) {
+            return "achievement";
+        }
+
+        return "miscellaneous";
     }
 
     //returns a boolean, whether the text includes any content written by the person tweeting.
-    get written():boolean {
-        //TODO: identify whether the tweet is written
-        return false;
+    get written(): boolean {
+        return this.writtenText.length > 0;
     }
 
-    get writtenText():string {
-        if(!this.written) {
-            return "";
+    get writtenText(): string {
+        // remove links and the run keeper hashtag
+        const cleaned = this.text
+            .replace(/https?:\/\/\S+/gi, "")
+            .replace(/#runkeeper\b/gi, "")
+            .trim();
+
+        if (this.source === "completed_event") {
+            // custom descriptions typically follow a dash
+            const separator = cleaned.indexOf(" - ");
+
+            if (separator === -1) {
+                return "";
+            }
+
+            const content = cleaned.slice(separator + 3).trim();
+
+            // another automatically generated description
+            if (content.toLowerCase() === "tomtom mysports watch") {
+                return "";
+            }
+
+            return content;
         }
-        //TODO: parse the written text from the tweet
+
+        // miscellaneous tweets are written by users
+        if (this.source === "miscellaneous") {
+            if (cleaned.toLowerCase().startsWith("just linked mywellness")) {
+                return "";
+            }
+
+            return cleaned;
+        }
+
         return "";
     }
 
